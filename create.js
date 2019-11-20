@@ -1,38 +1,53 @@
 import uuid from 'uuid';
-import aws from 'aws-sdk'
+import * as ddbLib from './lib/ddb-lib';
+import {success, failure} from './lib/response-objects';
 
-const ddb = new aws.DynamoDB.DocumentClient();
+//const ddb = new aws.DynamoDB.DocumentClient();
 
-export function main(event, context, callback) {
+export async function main(event, context, callback) {
 	const req_body = JSON.parse(event.body);
-
-	const table_params = {
+	const tableParams = {
 		TableName: process.env.tableName,
 		Item: {
-			userId: event.requestContext.identity.cognitoIdentityId,
-			uploadid: uuid.v1()
-			creationTime: Date.now()
-			imageInfo: {
-				imgageDescription: req_body.content,
-				attachment: req_body.attachment
-			}
+			userid: event.requestContext.identity.cognitoIdentityId,
+			uploadid: uuid.v1(),
+			creationTime: Date.now(),
+			imageDescription: req_body.content,
+			attachment: req_body.attachment
 		}
 	};
 
-	ddb.put(table_params, (error, data) => {
-		//set resp headers to enable cors
-		const headers = {
-			"Access-Control-Allow-Origin": "*",
-			"Access-Control-Allow-Credentials": true
-		}
+	try {
+		await ddbLib.call("put", tableParams);
+		return success(tableParams.Item);
+	}catch (e){
+		console.log(e);
+		return failure({status:false});
+	}
 
-		if (error) {
-			const resp = {
-				statusCode: 500,
-				headers: headers,
-				body: JSON.stringify({status:false})
-			};
-			callback(null, response);
-		}
-	});
+	// ddb.put(table_params, (error, data) => {
+	// 	//set resp headers to enable cors
+	// 	const headers = {
+	// 		"Access-Control-Allow-Origin": "*",
+	// 		"Access-Control-Allow-Credentials": true
+	// 	};
+
+	// 	if (error) {
+	// 		console.log(error);
+	// 		const resp = {
+	// 			statusCode: 500,
+	// 			headers: headers,
+	// 			body: JSON.stringify({status:false})
+	// 		};
+	// 		callback(null, resp);
+	// 		return;
+	// 	}
+
+	// 	const resp = {
+	// 		statusCode: 200,
+	// 		headers: headers,
+	// 		body: JSON.stringify(table_params.Item)
+	// 	};
+	// 	callback(null, resp);
+	// });
 }
