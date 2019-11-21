@@ -12,7 +12,7 @@ export async function main(event, context, callback) {
 			userid: event.requestContext.identity.cognitoIdentityId,
 			uploadid: uuid.v1(),
 			creationTime: Date.now(),
-			imageDescription: req_body.content,
+			imageDescription: req_body.imageDescription,
 			attachment: req_body.attachment
 		}
 	};
