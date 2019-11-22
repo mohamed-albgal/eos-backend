@@ -24,30 +24,3 @@ export async function main(event, context, callback) {
 		console.log(e);
 		return failure({status:false});
 	}
-
-	// ddb.put(table_params, (error, data) => {
-	// 	//set resp headers to enable cors
-	// 	const headers = {
-	// 		"Access-Control-Allow-Origin": "*",
-	// 		"Access-Control-Allow-Credentials": true
-	// 	};
-
-	// 	if (error) {
-	// 		console.log(error);
-	// 		const resp = {
-	// 			statusCode: 500,
-	// 			headers: headers,
-	// 			body: JSON.stringify({status:false})
-	// 		};
-	// 		callback(null, resp);
-	// 		return;
-	// 	}
-
-	// 	const resp = {
-	// 		statusCode: 200,
-	// 		headers: headers,
-	// 		body: JSON.stringify(table_params.Item)
-	// 	};
-	// 	callback(null, resp);
-	// });
-}
