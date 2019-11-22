@@ -9,10 +9,11 @@ export async function main(event, context) {
 			userid: event.requestContext.identity.cognitoIdentityId,
 			uploadid: event.pathParameters.id,
 		},
-		UpdateExpression: "SET imageDescription = :imageDescription,  attachment = :attachment",
+		UpdateExpression: "SET imageDescription = :imageDescription,  attachment = :attachment",//"tags = :tags"
 		ExpressionAttributeValues: {
 			":attachment": req_body.attachment || null,
 			":imageDescription": req_body.imageDescription || null
+			//":tags": req_body.tags || null
 		},
 		ReturnValues: "ALL_NEW"
 	};

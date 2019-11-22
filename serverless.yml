@@ -1,3 +1,5 @@
+org: malbgal
+app: eos
 service: eos
 
 # Create an optimized package for our functions
